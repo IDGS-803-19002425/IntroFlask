@@ -1,4 +1,11 @@
 {% extends "layout.html" %}
 {% block container %}
+{% import "macros.html" as macros %}
     <h1>Ejemplo1</h1>
+    <label for ="">Nombre:</label>
+    {{macros.datos("Nombre","Nombre")}}
+    <label for ="">edad:</label>
+    {{macros.datos("Edad","Edad")}}
+    <label for="">Contraseña</label>
+    {{macros.datos("Contraseña","Contraseña","password")}}
     {% endblock %}
