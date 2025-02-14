@@ -12,12 +12,15 @@ def index():
 @app.route("/operasBas")
 def operas():
         return render_template('OperasBas.html')
-    
 
+
+    
 
 @app.route("/operasBas",methods=['POST',"GET"])
 def resultado():
       resultado = 0
+      if request.method == 'GET':
+            return render_template('OperasBas.html')
       if request.method == 'POST':
         opcion = request.form.get('opcion')
         numero1 = int(request.form.get('numero1'))
@@ -32,6 +35,63 @@ def resultado():
             resultado = numero1 / numero2        
         return render_template('OperasBas.html',resultado=resultado)
       
+
+@app.route("/Cinepolis", methods=['POST',"GET"])
+def cinepolis():
+        costoBoleto = 12.00        
+        descuentoTarjeta = 0.10
+        descuento2 = 0.10
+        descuento3 = 0.15                
+        if request.method == 'GET':
+                return render_template('Cinepolis.html')
+        if request.method == 'POST':
+                nombre = request.form.get('nombre')
+                compradores = int(request.form.get('Compradores'))
+                tarjeta = request.form.get('tarjeta')
+                boletos = int(request.form.get('boletos'))   
+                limiteBoletos = compradores * 7
+
+                if boletos > limiteBoletos:
+                      mensaje = "Solo se pueden comprar 7 boletos por comprador."
+                      return render_template('Cinepolis.html',mensaje=mensaje)
+                if boletos == 2 or boletos == 1:                      
+                      if tarjeta == "si":
+                            costoBoletos = boletos * costoBoleto
+                            precioDescuento = costoBoletos * descuentoTarjeta
+                            precioFinal = costoBoletos - precioDescuento  
+                            valor = precioFinal
+                            valor = round(valor,2)
+                            return render_template('Cinepolis.html',valor=valor)
+                      if tarjeta == "no":
+                            costoBoletos = boletos * costoBoleto
+                            valor = costoBoletos
+                            valor = round(valor,2)
+                            return render_template('Cinepolis.html',valor=precioFinal)
+                if boletos == 3 or boletos == 4 or boletos ==5:
+                      precioTotalBoletos = boletos * costoBoleto
+                      precioDescuento = precioTotalBoletos * descuento2
+                      precioFinal = precioTotalBoletos - precioDescuento  
+                      precioFinal = round(precioFinal,2)
+                      if tarjeta == "si":             
+                        descuentoCineco = precioFinal * descuentoTarjeta
+                        valor = precioFinal - descuentoCineco          
+                        valor = round(valor,2)
+                        return render_template('Cinepolis.html',valor=valor)
+                      if tarjeta == "no":                        
+                        return render_template('Cinepolis.html',valor=precioFinal)
+                if boletos > 5:
+                      precioTotalBoletos = boletos * costoBoleto
+                      precioDescuento = precioTotalBoletos * descuento3
+                      precioFinal = precioTotalBoletos - precioDescuento
+                      precioFinal = round(precioFinal,2)
+                      if tarjeta == "si":
+                            descuentoCineco = precioFinal * descuentoTarjeta
+                            valor = precioFinal - descuentoCineco       
+                            valor = round(valor,2)
+                            return render_template('Cinepolis.html',valor=valor)
+                      if tarjeta == "no":                           
+                            return render_template('Cinepolis.html',valor=precioFinal)
+                                                      
 @app.route("/ejemplo1")
 def ejemplo1():
     return render_template('ejemplo1.html')
